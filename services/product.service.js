@@ -1,11 +1,15 @@
 const { faker } = require('@faker-js/faker');
 const boom = require('@hapi/boom');
+//const pool = require('../libs/postgress.pool');
+const {models} = require('../libs/sequelize');
 
 class ProductsService {
 
   constructor(){
     this.products = [];
     this.generate();
+    //this.pool = pool;  *conexion por medio de pool a la base de datos
+    //this.pool.on('error', (err)=> console.log(err)); *conexion por medio de pool a la base de datos
   }
 
   generate() {
@@ -22,17 +26,39 @@ class ProductsService {
   }
 
   async create(data) {
-    const newProduct = {
+    /*const newProduct = {
       id: faker.datatype.uuid(),
       ...data
     }
-    this.products.push(newProduct);
+    this.products.push(newProduct); //Este codigo era para generar datos aleatorios
+    return newProduct;*/
+
+    const newProduct = await models.Product.create(data);
     return newProduct;
+
   }
 
-  find() {
-    return this.products;
+
+  async find() {
+    /*const query = 'SELECT * FROM tasks';        //Este codigo era sin tener uso de modelos de sequelize
+    //const rta = await this.pool.query(query);
+    //const rta = await sequelize.query(query);
+    //return rta.rows;
+    const [data, metadata] = await sequelize.query(query);
+    return {
+      data,
+      metadata
+    }*/
+
+    const products = await models.Product.findAll({
+      include: ['category']
+    }
+    );
+    return products;
+
   }
+
+
 
   async findOne(id) {
     const product = this.products.find(item => item.id === id);

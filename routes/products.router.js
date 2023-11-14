@@ -9,6 +9,7 @@ const service = new ProductsService();
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log('entre al servicioi');
     const products = await service.find();
     res.json(products);
   } catch (error) {

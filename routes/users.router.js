@@ -9,7 +9,9 @@ const service = new UserService();
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log('esto se obtuvo de la base de datos:');
     const categories = await service.find();
+    console.log(categories);
     res.json(categories);
   } catch (error) {
     next(error);
@@ -34,8 +36,8 @@ router.post('/',
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCategory = await service.create(body);
-      res.status(201).json(newCategory);
+      const newUser = await service.create(body);
+      res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
